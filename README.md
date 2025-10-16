@@ -66,6 +66,6 @@ flutter_bloc: For Bloc state management and event handling.
 http: For REST API calls to CoinGecko.
 equatable: To simplify state comparison in Bloc.
 cached_network_image: To efficiently load and cache crypto logos in UI.
-intl: For formatting currency and numbers (optional but recommended).
+intl: For formatting currency and numbers
 
 You can find all dependencies in the pubspec.yaml file.
