@@ -48,26 +48,46 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       _filteredCoins = filtered;
     });
   }
-
-  void _addCoin() {
+  void _addCoin() async {
     final qty = double.tryParse(_quantityController.text);
-    if (_selectedCoin == null || qty == null || qty <= 0) {
+    if (_selectedCoin == null || qty == null || qty == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select a valid coin & quantity')),
       );
       return;
     }
-
+    // Fetch full details (including logo) from API
+    final details = await apiService.fetchCoinDetails(_selectedCoin!.id);
     final item = PortfolioItem(
       coinId: _selectedCoin!.id,
-      coinName: _selectedCoin!.name,
-      symbol: _selectedCoin!.symbol,
+      coinName: details['name'],
+      symbol: details['symbol'],
       quantity: qty,
+      logoUrl: details['logo'], // <-- attaches logo
     );
-
     context.read<PortfolioBloc>().add(AddAsset(item));
     Navigator.pop(context);
   }
+
+  // void _addCoin() {
+  //   final qty = double.tryParse(_quantityController.text);
+  //   if (_selectedCoin == null || qty == null || qty <= 0) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Please select a valid coin & quantity')),
+  //     );
+  //     return;
+  //   }
+  //
+  //   final item = PortfolioItem(
+  //     coinId: _selectedCoin!.id,
+  //     coinName: _selectedCoin!.name,
+  //     symbol: _selectedCoin!.symbol,
+  //     quantity: qty,
+  //   );
+  //
+  //   context.read<PortfolioBloc>().add(AddAsset(item));
+  //   Navigator.pop(context);
+  // }
 
   @override
   Widget build(BuildContext context) {

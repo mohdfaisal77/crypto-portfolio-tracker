@@ -19,13 +19,33 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
     emit(state.copyWith(portfolio: data, isLoading: false));
     add(RefreshPrices());
   }
+  Future<void> _onAddAsset(AddAsset event, Emitter<PortfolioState> emit) async {
+    var item = event.item;
 
-  Future<void> _onAddAsset(AddAsset event, Emitter emit) async {
-    final updated = List<PortfolioItem>.from(state.portfolio)..add(event.item);
+    if (item.logoUrl == null) {
+      // Fetch logo if missing
+      final details = await repository.api.fetchCoinDetails(item.coinId);
+      item = PortfolioItem(
+        coinId: item.coinId,
+        coinName: item.coinName,
+        symbol: item.symbol,
+        quantity: item.quantity,
+        logoUrl: details['logo'],
+      );
+    }
+
+    final updated = List.of(state.portfolio)..add(item);
     await repository.savePortfolio(updated);
     emit(state.copyWith(portfolio: updated));
     add(RefreshPrices());
   }
+
+  // Future<void> _onAddAsset(AddAsset event, Emitter emit) async {
+  //   final updated = List<PortfolioItem>.from(state.portfolio)..add(event.item);
+  //   await repository.savePortfolio(updated);
+  //   emit(state.copyWith(portfolio: updated));
+  //   add(RefreshPrices());
+  // }
 
   Future<void> _onRemoveAsset(RemoveAsset event, Emitter emit) async {
     final updated =
