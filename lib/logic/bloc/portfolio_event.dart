@@ -16,3 +16,4 @@ class RemoveAsset extends PortfolioEvent {
   RemoveAsset(this.coinId);
 }
 class RefreshPrices extends PortfolioEvent {}
+
