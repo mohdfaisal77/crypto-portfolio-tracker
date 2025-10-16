@@ -22,6 +22,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   List<Coin> _filteredCoins = [];
   Coin? _selectedCoin;
   bool _isLoading = true;
+  bool _isAdding = false;  // New loading flag for add operation
 
   @override
   void initState() {
@@ -48,6 +49,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       _filteredCoins = filtered;
     });
   }
+
   void _addCoin() async {
     final qty = double.tryParse(_quantityController.text);
     if (_selectedCoin == null || qty == null || qty == 0) {
@@ -56,38 +58,35 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
       );
       return;
     }
-    // Fetch full details (including logo) from API
-    final details = await apiService.fetchCoinDetails(_selectedCoin!.id);
-    final item = PortfolioItem(
-      coinId: _selectedCoin!.id,
-      coinName: details['name'],
-      symbol: details['symbol'],
-      quantity: qty,
-      logoUrl: details['logo'], // <-- attaches logo
-    );
-    context.read<PortfolioBloc>().add(AddAsset(item));
-    Navigator.pop(context);
-  }
 
-  // void _addCoin() {
-  //   final qty = double.tryParse(_quantityController.text);
-  //   if (_selectedCoin == null || qty == null || qty <= 0) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Please select a valid coin & quantity')),
-  //     );
-  //     return;
-  //   }
-  //
-  //   final item = PortfolioItem(
-  //     coinId: _selectedCoin!.id,
-  //     coinName: _selectedCoin!.name,
-  //     symbol: _selectedCoin!.symbol,
-  //     quantity: qty,
-  //   );
-  //
-  //   context.read<PortfolioBloc>().add(AddAsset(item));
-  //   Navigator.pop(context);
-  // }
+    setState(() {
+      _isAdding = true;
+    });
+
+    try {
+      // Fetch full details (including logo) from API
+      final details = await apiService.fetchCoinDetails(_selectedCoin!.id);
+      final item = PortfolioItem(
+        coinId: _selectedCoin!.id,
+        coinName: details['name'],
+        symbol: details['symbol'],
+        quantity: qty,
+        logoUrl: details['logo'],
+      );
+      context.read<PortfolioBloc>().add(AddAsset(item));
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add asset: $e')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isAdding = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +137,14 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed: _addCoin,
-              icon: const Icon(Icons.save),
+              onPressed: _isAdding ? null : _addCoin,
+              icon: _isAdding
+                  ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+                  : const Icon(Icons.save),
               label: const Text('Add to Portfolio'),
             ),
           ],

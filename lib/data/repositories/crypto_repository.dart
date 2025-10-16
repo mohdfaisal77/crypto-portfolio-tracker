@@ -14,7 +14,7 @@ class CryptoRepository {
       coinName: details['name'],
       symbol: details['symbol'],
       quantity: quantity,
-      logoUrl: details['logo'], // save logo URL
+      logoUrl: details['logo'],
     );
   }
 

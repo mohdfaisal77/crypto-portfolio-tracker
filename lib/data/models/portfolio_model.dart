@@ -3,7 +3,7 @@ class PortfolioItem {
   final String coinName;
   final String symbol;
   final double quantity;
-  final String? logoUrl; // <-- Add this line
+  final String? logoUrl;
 
   PortfolioItem({
     required this.coinId,
@@ -18,7 +18,7 @@ class PortfolioItem {
     'coinName': coinName,
     'symbol': symbol,
     'quantity': quantity,
-    'logoUrl': logoUrl, // <-- Add this line
+    'logoUrl': logoUrl,
   };
 
   factory PortfolioItem.fromJson(Map<String, dynamic> json) => PortfolioItem(
@@ -26,6 +26,6 @@ class PortfolioItem {
     coinName: json['coinName'],
     symbol: json['symbol'],
     quantity: json['quantity'],
-    logoUrl: json['logoUrl'], // <-- Add this line
+    logoUrl: json['logoUrl'],
   );
 }

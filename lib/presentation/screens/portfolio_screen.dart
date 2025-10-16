@@ -13,7 +13,25 @@ class PortfolioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Crypto Portfolio')),
+      appBar: AppBar(title: const Text('Crypto Portfolio'),
+          actions: [
+          PopupMenuButton<SortOption>(
+          onSelected: (option) {
+    context.read<PortfolioBloc>().add(SortPortfolio(option));
+    },
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: SortOption.name,
+          child: Text("Sort by Name"),
+        ),
+        const PopupMenuItem(
+          value: SortOption.value,
+          child: Text("Sort by Value"),
+        ),
+      ],
+      ),
+    ],
+      ),
       body: BlocBuilder<PortfolioBloc, PortfolioState>(
         builder: (context, state) {
           if (state.isLoading) return const Center(child: CircularProgressIndicator());

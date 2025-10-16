@@ -1,33 +1,38 @@
 import 'package:equatable/equatable.dart';
 import '../../data/models/portfolio_model.dart';
 
+enum SortOption { name, value }
+
 class PortfolioState extends Equatable {
   final List<PortfolioItem> portfolio;
   final Map<String, double> prices;
   final bool isLoading;
-  final String? error;
-
+  final SortOption sortOption;
+  final bool isAdding;
   const PortfolioState({
     this.portfolio = const [],
     this.prices = const {},
+    this.isAdding = false,
     this.isLoading = false,
-    this.error,
+    this.sortOption = SortOption.name,
   });
 
   PortfolioState copyWith({
     List<PortfolioItem>? portfolio,
     Map<String, double>? prices,
     bool? isLoading,
-    String? error,
+    bool? isAdding,
+    SortOption? sortOption,
   }) {
     return PortfolioState(
       portfolio: portfolio ?? this.portfolio,
       prices: prices ?? this.prices,
       isLoading: isLoading ?? this.isLoading,
-      error: error,
+      isAdding: isAdding ?? this.isAdding,
+      sortOption: sortOption ?? this.sortOption,
     );
   }
 
   @override
-  List<Object?> get props => [portfolio, prices, isLoading, error];
+  List<Object> get props => [portfolio, prices, isLoading, sortOption];
 }
