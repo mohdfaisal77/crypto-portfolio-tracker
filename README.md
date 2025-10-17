@@ -1,6 +1,6 @@
 ## Crypto Portfolio Tracker ##
 
-This crypto portfolio app is designed to help users efficiently manage and track their cryptocurrency investments. Its primary purpose is to aggregate data from multiple exchanges and wallets into one centralized platform, enabling users to monitor real-time asset values, track profits and losses, and analyze portfolio performance. The app simplifies the complexity of managing diverse digital assets, including cryptocurrencies and NFTs, and provides key features such as live price updates, asset allocation, and tax reporting tools.
+This crypto portfolio app is designed to help users efficiently manage and track their cryptocurrency investments. Its primary purpose is to aggregate data from multiple exchanges and wallets into one centralized platform, enabling users to monitor real-time asset values, track profits and losses, and analyze portfolio performance.
 
 App Setup Steps
 -------------------
@@ -47,7 +47,7 @@ Prices and coin logos are fetched dynamically from the CoinGecko API.
 ## Recorded Video ##
 --------------------
 A recorded video demonstration of the implemented sorting feature and portfolio functionalities is publicly available here:
-
+https://youtube.com/shorts/xu2yVqadRnk
 
 ## Architectural Choices ##
 --------------------------------
